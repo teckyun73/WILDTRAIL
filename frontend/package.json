@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "check:backend": "powershell -ExecutionPolicy Bypass -File scripts/check-backend.ps1",
+    "dev": "npm run check:backend && vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

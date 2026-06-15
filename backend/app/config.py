@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     )
 
     database_url: str = "sqlite:///./wildtrail.db"
+    llm_provider: str = "gemini"
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.5-flash-lite"
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"

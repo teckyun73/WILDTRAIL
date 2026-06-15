@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.models import Hotspot, Species
+from app.services.llm import chat, is_llm_configured, llm_fallback_hint
 
 settings = get_settings()
 logger = logging.getLogger(__name__)
@@ -142,40 +143,18 @@ class EncyclopediaRAGService:
         return results
 
     def _answer_with_llm(self, question: str, chunks: list[DocumentChunk]) -> str | None:
-        if not settings.openai_api_key:
+        if not is_llm_configured():
             return None
-        try:
-            from openai import OpenAI
-
-            client = OpenAI(api_key=settings.openai_api_key)
-            context = "\n\n".join(
-                f"[{c.source}] {c.title}\n{c.content}" for c in chunks
-            )
-            response = client.chat.completions.create(
-                model=settings.openai_model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "당신은 한국 야생동물 도감 도우미입니다. "
-                            "제공된 참고 문서만 사용해 한국어로 답하세요. "
-                            "문서에 없으면 모른다고 말하세요."
-                        ),
-                    },
-                    {
-                        "role": "user",
-                        "content": f"질문: {question}\n\n참고문서:\n{context}",
-                    },
-                ],
-                temperature=0.3,
-            )
-            return response.choices[0].message.content
-        except Exception:
-            logger.warning(
-                "LLM encyclopedia answer failed; falling back to template response",
-                exc_info=True,
-            )
-            return None
+        context = "\n\n".join(f"[{c.source}] {c.title}\n{c.content}" for c in chunks)
+        return chat(
+            system=(
+                "당신은 한국 야생동물 도감 도우미입니다. "
+                "제공된 참고 문서만 사용해 한국어로 답하세요. "
+                "문서에 없으면 모른다고 말하세요."
+            ),
+            user=f"질문: {question}\n\n참고문서:\n{context}",
+            temperature=0.3,
+        )
 
     def _answer_with_template(self, question: str, chunks: list[DocumentChunk]) -> str:
         lines = [f"질문: {question}", "", "관련 도감 정보:"]
@@ -183,7 +162,7 @@ class EncyclopediaRAGService:
             snippet = chunk.content.replace("\n", " ")[:220]
             lines.append(f"- {chunk.title}: {snippet}...")
         lines.append("")
-        lines.append("더 정확한 답변을 위해 OPENAI_API_KEY를 설정하면 LLM 요약이 활성화됩니다.")
+        lines.append(llm_fallback_hint())
         return "\n".join(lines)
 
     def ask(

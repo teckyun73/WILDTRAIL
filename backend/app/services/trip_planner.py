@@ -1,10 +1,9 @@
 import json
-import logging
 
 from sqlalchemy.orm import Session
 
-from app.config import get_settings
 from app.models import Hotspot, Species
+from app.services.llm import chat, is_llm_configured
 from app.schemas import (
     CostBreakdown,
     TripDayItem,
@@ -13,8 +12,6 @@ from app.schemas import (
     TripPlanResponse,
 )
 
-settings = get_settings()
-logger = logging.getLogger(__name__)
 DISCLAIMER = (
     "야생동물 출현은 보장되지 않습니다. 보호구역 규정을 준수하고 안전에 유의하세요. "
     "경비는 참고용 추정치이며 실제 비용과 차이가 있을 수 있습니다."
@@ -32,19 +29,12 @@ class TripPlannerService:
         days_plan = self._build_schedule(request, species, hotspot)
         summary = self._build_summary(request, species, hotspot, costs)
 
-        if settings.openai_api_key:
-            try:
-                llm_summary = self._enhance_with_llm(request, species, hotspot, costs, days_plan)
-                if llm_summary:
-                    summary = llm_summary
-                    source = "llm+rules"
-                else:
-                    source = "rules"
-            except Exception:
-                logger.warning(
-                    "LLM trip summary enhancement failed; using rule-based summary",
-                    exc_info=True,
-                )
+        if is_llm_configured():
+            llm_summary = self._enhance_with_llm(request, species, hotspot, costs, days_plan)
+            if llm_summary:
+                summary = llm_summary
+                source = "llm+rules"
+            else:
                 source = "rules"
         else:
             source = "rules"
@@ -202,9 +192,6 @@ class TripPlannerService:
         costs: CostBreakdown,
         days_plan: list[TripDayPlan],
     ) -> str | None:
-        from openai import OpenAI
-
-        client = OpenAI(api_key=settings.openai_api_key)
         payload = {
             "species": species.common_name,
             "hotspot": hotspot.name,
@@ -215,25 +202,14 @@ class TripPlannerService:
             "costs": costs.model_dump(),
             "schedule": [day.model_dump() for day in days_plan],
         }
-        response = client.chat.completions.create(
-            model=settings.openai_model,
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "당신은 한국 생태관광 플래너입니다. 제공된 사실만 사용하고 "
-                        "2~3문장으로 일정 요약을 작성하세요. 출현 보장 표현은 금지합니다."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": json.dumps(payload, ensure_ascii=False),
-                },
-            ],
+        return chat(
+            system=(
+                "당신은 한국 생태관광 플래너입니다. 제공된 사실만 사용하고 "
+                "2~3문장으로 일정 요약을 작성하세요. 출현 보장 표현은 금지합니다."
+            ),
+            user=json.dumps(payload, ensure_ascii=False),
             temperature=0.4,
         )
-        content = response.choices[0].message.content
-        return content.strip() if content else None
 
 
 trip_planner_service = TripPlannerService()

@@ -191,5 +191,7 @@ class HealthResponse(BaseModel):
     audio_model: ModelStatus
     species_json_count: int
     species_db_count: int
-    openai_configured: bool
+    llm_configured: bool
+    llm_provider: str
+    llm_model: str
     warnings: list[str] = Field(default_factory=list)

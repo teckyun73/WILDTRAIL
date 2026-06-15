@@ -1,12 +1,10 @@
 from sqlalchemy.orm import Session
 
-from app.config import get_settings
 from app.models import Species
 from app.schemas import HealthResponse, ModelStatus
 from app.services.audio_identify import audio_identify_service
 from app.services.identify import identify_service
-
-settings = get_settings()
+from app.services.llm import get_llm_status
 
 
 def build_health_response(db: Session) -> HealthResponse:
@@ -44,8 +42,13 @@ def build_health_response(db: Session) -> HealthResponse:
             "오디오 분류 모델이 로드되지 않았습니다. 오디오 식별은 분석+stub 모드입니다."
         )
 
-    if not settings.openai_api_key.strip():
-        warnings.append("OPENAI_API_KEY가 설정되지 않았습니다. LLM 기능은 비활성화됩니다.")
+    llm_status = get_llm_status()
+    if not llm_status.configured:
+        key_name = "OPENAI_API_KEY" if llm_status.provider == "openai" else "GEMINI_API_KEY"
+        warnings.append(
+            f"LLM API 키가 설정되지 않았습니다 ({llm_status.provider}). "
+            f"backend/.env에 {key_name}를 추가하세요."
+        )
 
     status = "ok" if not warnings else "degraded"
 
@@ -56,6 +59,8 @@ def build_health_response(db: Session) -> HealthResponse:
         audio_model=ModelStatus(**audio_status),
         species_json_count=species_json_count,
         species_db_count=species_db_count,
-        openai_configured=bool(settings.openai_api_key.strip()),
+        llm_configured=llm_status.configured,
+        llm_provider=llm_status.provider,
+        llm_model=llm_status.model,
         warnings=warnings,
     )

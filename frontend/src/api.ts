@@ -13,10 +13,23 @@ import type {
 
 const API_BASE = "/api/v1";
 
+const BACKEND_START_HINT =
+  "백엔드 API(127.0.0.1:8000)에 연결할 수 없습니다. " +
+  "새 터미널에서 backend 폴더로 이동한 뒤 " +
+  "uvicorn app.main:app --reload --host 127.0.0.1 --port 8000 을 먼저 실행하세요.";
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, options);
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, options);
+  } catch {
+    throw new Error(BACKEND_START_HINT);
+  }
   if (!response.ok) {
     const detail = await response.text();
+    if (response.status === 500 && !detail.trim()) {
+      throw new Error(BACKEND_START_HINT);
+    }
     throw new Error(detail || `요청 실패: ${response.status}`);
   }
   return response.json() as Promise<T>;
