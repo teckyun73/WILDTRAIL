@@ -1,0 +1,25 @@
+{
+  "compared_at": "2026-06-15T06:30:00+00:00",
+  "baseline": {
+    "name": "legacy_resize224",
+    "pipeline": "Resize(224) → ToTensor → Normalize",
+    "accuracy": 0.7137,
+    "macro_f1": 0.7149
+  },
+  "unified": {
+    "name": "resize256_centercrop224",
+    "pipeline": "Resize(256) → CenterCrop(224) → ToTensor → Normalize",
+    "accuracy": 0.7471,
+    "macro_f1": 0.7478,
+    "source": "models/image_transforms.py"
+  },
+  "delta_accuracy_pp": 3.33,
+  "delta_macro_f1_pp": 3.29,
+  "shared_modules": [
+    "models/image_transforms.py",
+    "models/train.py (val)",
+    "models/evaluate.py",
+    "backend/app/services/identify.py"
+  ],
+  "note": "기존 checkpoint val_acc(71.37%)는 구 파이프라인 기준입니다. 재학습 시 새 val 전처리로 측정됩니다."
+}

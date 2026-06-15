@@ -1,0 +1,78 @@
+{
+  "saved_at": "2026-06-15T07:35:41.932990+00:00",
+  "overall_accuracy": 0.747059,
+  "macro_f1": 0.747769,
+  "preprocess_version": "resize256_centercrop224",
+  "species_raw_counts": {
+    "accipiter_gentilis": 89,
+    "buteo_japonicus": 90,
+    "capreolus_capreolus": 90,
+    "cettia_diphone": 90,
+    "corvus_corone": 89,
+    "emberiza_schoeniclus": 89,
+    "falco_tinnunculus": 90,
+    "hydropotes_inermis": 90,
+    "parus_minor": 90,
+    "passer_montanus": 89,
+    "pica_pica": 90,
+    "pica_serica": 88
+  },
+  "pairs": [
+    {
+      "pair": [
+        "pica_pica",
+        "pica_serica"
+      ],
+      "combined_confusion_rate": 0.0571
+    },
+    {
+      "pair": [
+        "pica_serica",
+        "corvus_corone"
+      ],
+      "combined_confusion_rate": 0.0294
+    },
+    {
+      "pair": [
+        "pica_pica",
+        "corvus_corone"
+      ],
+      "combined_confusion_rate": 0.0
+    },
+    {
+      "pair": [
+        "capreolus_capreolus",
+        "hydropotes_inermis"
+      ],
+      "combined_confusion_rate": 0.1389
+    },
+    {
+      "pair": [
+        "falco_tinnunculus",
+        "accipiter_gentilis"
+      ],
+      "combined_confusion_rate": 0.1143
+    },
+    {
+      "pair": [
+        "cettia_diphone",
+        "parus_minor"
+      ],
+      "combined_confusion_rate": 0.0833
+    },
+    {
+      "pair": [
+        "passer_montanus",
+        "emberiza_schoeniclus"
+      ],
+      "combined_confusion_rate": 0.0882
+    },
+    {
+      "pair": [
+        "buteo_japonicus",
+        "accipiter_gentilis"
+      ],
+      "combined_confusion_rate": 0.0286
+    }
+  ]
+}

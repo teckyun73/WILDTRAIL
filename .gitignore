@@ -1,0 +1,25 @@
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.env
+backend/wildtrail.db
+*.db
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# ML / datasets (Git 제외 — GitHub 용량 제한)
+models/checkpoints/
+data/images/
+data/audio/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Legacy duplicate workspace (do not commit)
+wildtrail/

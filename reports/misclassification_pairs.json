@@ -1,0 +1,62 @@
+[
+  {
+    "true_id": "capreolus_capreolus",
+    "pred_id": "hydropotes_inermis",
+    "count": 5,
+    "rate_of_true": 0.2778
+  },
+  {
+    "true_id": "cettia_diphone",
+    "pred_id": "parus_minor",
+    "count": 4,
+    "rate_of_true": 0.2222
+  },
+  {
+    "true_id": "falco_tinnunculus",
+    "pred_id": "accipiter_gentilis",
+    "count": 4,
+    "rate_of_true": 0.2222
+  },
+  {
+    "true_id": "passer_montanus",
+    "pred_id": "emberiza_schoeniclus",
+    "count": 3,
+    "rate_of_true": 0.1765
+  },
+  {
+    "true_id": "accipiter_gentilis",
+    "pred_id": "cettia_diphone",
+    "count": 2,
+    "rate_of_true": 0.1176
+  },
+  {
+    "true_id": "alcedo_atthis",
+    "pred_id": "capreolus_capreolus",
+    "count": 2,
+    "rate_of_true": 0.1176
+  },
+  {
+    "true_id": "anas_platyrhynchos",
+    "pred_id": "melanitta_fusca",
+    "count": 2,
+    "rate_of_true": 0.1176
+  },
+  {
+    "true_id": "buteo_japonicus",
+    "pred_id": "accipiter_gentilis",
+    "count": 2,
+    "rate_of_true": 0.1111
+  },
+  {
+    "true_id": "caprimulgus_jotaka",
+    "pred_id": "athene_noctua",
+    "count": 2,
+    "rate_of_true": 0.1111
+  },
+  {
+    "true_id": "ciconia_boyciana",
+    "pred_id": "nycticorax_nycticorax",
+    "count": 2,
+    "rate_of_true": 0.1111
+  }
+]
