@@ -1,5 +1,5 @@
 {
-  "saved_at": "2026-06-15T07:35:41.932990+00:00",
+  "saved_at": "2026-06-15T12:00:07.327227+00:00",
   "overall_accuracy": 0.747059,
   "macro_f1": 0.747769,
   "preprocess_version": "resize256_centercrop224",

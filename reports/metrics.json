@@ -1,12 +1,15 @@
 {
-  "accuracy": 0.747059,
-  "macro_f1": 0.747769,
-  "weighted_f1": 0.747952,
+  "accuracy": 0.747698,
+  "macro_f1": 0.746506,
+  "weighted_f1": 0.747162,
   "num_classes": 29,
-  "num_samples": 510,
-  "checkpoint_val_acc": 0.7137254901960784,
+  "num_samples": 543,
+  "checkpoint_val_acc": 0.7476979742173112,
   "checkpoint_path": "C:\\CURSUR_PJT\\ICT Education 20260429\\models\\checkpoints\\best_model.pth",
   "data_dir": "C:\\CURSUR_PJT\\ICT Education 20260429\\data\\images\\val",
-  "evaluated_at": "2026-06-15T07:28:35.237337+00:00",
-  "preprocess_version": "resize256_centercrop224"
+  "evaluated_at": "2026-06-15T14:37:31.034398+00:00",
+  "preprocess_version": "resize256_centercrop224",
+  "model_version": "wildtrail-efficientnet_b0-29c-20260615-f1ad3f79",
+  "trained_at": "2026-06-15T14:20:38.186669+00:00",
+  "dataset_fingerprint": "f1ad3f799265a6b2"
 }

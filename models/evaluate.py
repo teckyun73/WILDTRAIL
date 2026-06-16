@@ -5,10 +5,27 @@ WildTrail 이미지 분류 모델 평가 스크립트
 
 사용법:
   cd models
-  python evaluate.py --data-dir ../data/images/val --checkpoint checkpoints/best_model.pth --output ../reports
+  # Windows (backend venv — torch 설치됨)
+  ..\\backend\\.venv\\Scripts\\python evaluate.py --output ..\\reports
+  # 또는
+  .\\ml.ps1 evaluate.py --output ..\\reports
 """
 
 from __future__ import annotations
+
+import sys
+
+try:
+    import torch
+except ModuleNotFoundError:
+    print(
+        "ERROR: torch가 설치되지 않았습니다.\n"
+        "시스템 python 대신 backend 가상환경을 사용하세요:\n"
+        "  ..\\backend\\.venv\\Scripts\\python evaluate.py --output ..\\reports\n"
+        "또는: .\\ml.ps1 evaluate.py --output ..\\reports",
+        file=sys.stderr,
+    )
+    raise SystemExit(1) from None
 
 import argparse
 import csv
@@ -18,7 +35,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
 import torch.nn as nn
 from sklearn.metrics import (
     accuracy_score,

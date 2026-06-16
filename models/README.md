@@ -1,5 +1,25 @@
 # WildTrail ML Models
 
+> **Windows:** `python` 대신 `backend/.venv`의 Python을 사용하세요. (`torch` 등 ML 패키지가 여기 설치됩니다.)
+
+```powershell
+cd models
+# 방법 1 — 래퍼 스크립트 (권장)
+.\ml.ps1 evaluate.py --output ..\reports
+
+# 방법 2 — venv Python 직접 호출
+..\backend\.venv\Scripts\python evaluate.py --output ..\reports
+```
+
+가상환경이 없다면:
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
 ## 1. 데이터 준비
 
 ```bash

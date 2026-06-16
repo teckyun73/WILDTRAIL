@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T07:35:41.834315+00:00",
+  "generated_at": "2026-06-15T14:44:44.240265+00:00",
   "manifest_version": 1,
   "hard_negative_extra_per_pair": 50,
   "pairs": [
@@ -10,12 +10,12 @@
       ],
       "priority": "high",
       "target_extra": 50,
-      "reason": "species.json 유사종; 까치류 식별 핵심",
-      "baseline_combined_confusion_rate": 0.0,
-      "current_combined_confusion_rate": 0.0571,
-      "improvement_pp": -5.71,
+      "reason": "species.json 유사종; 전처리 통일 후 val 직접 혼동 5.7%(2/35)",
+      "baseline_combined_confusion_rate": 0.0571,
+      "current_combined_confusion_rate": 0.0286,
+      "improvement_pp": 2.85,
       "target_reduction_rate": 0.2,
-      "meets_target": false,
+      "meets_target": true,
       "species_progress": [
         {
           "species_id": "pica_pica",
@@ -56,8 +56,8 @@
       "target_extra": 50,
       "reason": "val에서 어치→까마귀 11.8% 오분류",
       "baseline_combined_confusion_rate": 0.059,
-      "current_combined_confusion_rate": 0.0294,
-      "improvement_pp": 2.96,
+      "current_combined_confusion_rate": 0.0,
+      "improvement_pp": 5.9,
       "target_reduction_rate": 0.2,
       "meets_target": true,
       "species_progress": [
@@ -99,10 +99,10 @@
       "target_extra": 40,
       "reason": "까마귀→까치 5.9% 오분류",
       "baseline_combined_confusion_rate": 0.029,
-      "current_combined_confusion_rate": 0.0,
-      "improvement_pp": 2.9,
+      "current_combined_confusion_rate": 0.0286,
+      "improvement_pp": 0.04,
       "target_reduction_rate": 0.2,
-      "meets_target": true,
+      "meets_target": false,
       "species_progress": [
         {
           "species_id": "pica_pica",
@@ -141,32 +141,32 @@
       "target_extra": 50,
       "reason": "Top-1 오분류 쌍; 16.7% 혼동률",
       "baseline_combined_confusion_rate": 0.167,
-      "current_combined_confusion_rate": 0.1389,
-      "improvement_pp": 2.81,
+      "current_combined_confusion_rate": 0.098,
+      "improvement_pp": 6.9,
       "target_reduction_rate": 0.2,
-      "meets_target": false,
+      "meets_target": true,
       "species_progress": [
         {
           "species_id": "capreolus_capreolus",
           "common_name": "노루",
-          "raw_count": 90,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 50,
-          "gap_to_target_extra": 50
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "hydropotes_inermis",
           "common_name": "고라니",
-          "raw_count": 90,
+          "raw_count": 115,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 25,
+          "train_count": 92,
+          "val_count": 23,
           "target_extra": 50,
-          "gap_to_target_extra": 50
+          "gap_to_target_extra": 25
         }
       ],
       "status": "COLLECTING",
@@ -185,32 +185,32 @@
       "target_extra": 50,
       "reason": "Top-3 오분류; 맹금류 F1 최저",
       "baseline_combined_confusion_rate": 0.086,
-      "current_combined_confusion_rate": 0.1143,
-      "improvement_pp": -2.83,
+      "current_combined_confusion_rate": 0.1087,
+      "improvement_pp": -2.27,
       "target_reduction_rate": 0.2,
       "meets_target": false,
       "species_progress": [
         {
           "species_id": "falco_tinnunculus",
           "common_name": "황조롱이",
-          "raw_count": 90,
+          "raw_count": 124,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 34,
+          "train_count": 100,
+          "val_count": 24,
           "target_extra": 50,
-          "gap_to_target_extra": 50
+          "gap_to_target_extra": 16
         },
         {
           "species_id": "accipiter_gentilis",
           "common_name": "참매",
-          "raw_count": 89,
+          "raw_count": 112,
           "baseline_raw_count": 89,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 17,
+          "additional_collected": 23,
+          "train_count": 90,
+          "val_count": 22,
           "target_extra": 50,
-          "gap_to_target_extra": 50
+          "gap_to_target_extra": 27
         }
       ],
       "status": "COLLECTING",
@@ -228,8 +228,8 @@
       "target_extra": 40,
       "reason": "Top-2 오분류; 22.2% (새사촌 기준)",
       "baseline_combined_confusion_rate": 0.111,
-      "current_combined_confusion_rate": 0.0833,
-      "improvement_pp": 2.77,
+      "current_combined_confusion_rate": 0.0556,
+      "improvement_pp": 5.54,
       "target_reduction_rate": 0.2,
       "meets_target": true,
       "species_progress": [
@@ -271,21 +271,21 @@
       "target_extra": 40,
       "reason": "참새 F1 0.57; 쑥새와 혼동",
       "baseline_combined_confusion_rate": 0.088,
-      "current_combined_confusion_rate": 0.0882,
-      "improvement_pp": -0.02,
+      "current_combined_confusion_rate": 0.0976,
+      "improvement_pp": -0.96,
       "target_reduction_rate": 0.2,
       "meets_target": false,
       "species_progress": [
         {
           "species_id": "passer_montanus",
           "common_name": "참새",
-          "raw_count": 89,
+          "raw_count": 124,
           "baseline_raw_count": 89,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 17,
+          "additional_collected": 35,
+          "train_count": 100,
+          "val_count": 24,
           "target_extra": 40,
-          "gap_to_target_extra": 40
+          "gap_to_target_extra": 5
         },
         {
           "species_id": "emberiza_schoeniclus",
@@ -314,10 +314,10 @@
       "target_extra": 30,
       "reason": "말똥가리→참매 오분류",
       "baseline_combined_confusion_rate": 0.057,
-      "current_combined_confusion_rate": 0.0286,
-      "improvement_pp": 2.84,
+      "current_combined_confusion_rate": 0.05,
+      "improvement_pp": 0.7,
       "target_reduction_rate": 0.2,
-      "meets_target": true,
+      "meets_target": false,
       "species_progress": [
         {
           "species_id": "buteo_japonicus",
@@ -333,13 +333,13 @@
         {
           "species_id": "accipiter_gentilis",
           "common_name": "참매",
-          "raw_count": 89,
+          "raw_count": 112,
           "baseline_raw_count": 89,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 17,
+          "additional_collected": 23,
+          "train_count": 90,
+          "val_count": 22,
           "target_extra": 30,
-          "gap_to_target_extra": 30
+          "gap_to_target_extra": 7
         }
       ],
       "status": "COLLECTING",
