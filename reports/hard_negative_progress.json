@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T14:44:44.240265+00:00",
+  "generated_at": "2026-06-18T17:24:11.611552+00:00",
   "manifest_version": 1,
   "hard_negative_extra_per_pair": 50,
   "pairs": [
@@ -12,21 +12,21 @@
       "target_extra": 50,
       "reason": "species.json 유사종; 전처리 통일 후 val 직접 혼동 5.7%(2/35)",
       "baseline_combined_confusion_rate": 0.0571,
-      "current_combined_confusion_rate": 0.0286,
-      "improvement_pp": 2.85,
+      "current_combined_confusion_rate": 0.0889,
+      "improvement_pp": -3.18,
       "target_reduction_rate": 0.2,
-      "meets_target": true,
+      "meets_target": false,
       "species_progress": [
         {
           "species_id": "pica_pica",
           "common_name": "까치",
-          "raw_count": 90,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 50,
-          "gap_to_target_extra": 50
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "pica_serica",
@@ -56,8 +56,8 @@
       "target_extra": 50,
       "reason": "val에서 어치→까마귀 11.8% 오분류",
       "baseline_combined_confusion_rate": 0.059,
-      "current_combined_confusion_rate": 0.0,
-      "improvement_pp": 5.9,
+      "current_combined_confusion_rate": 0.0444,
+      "improvement_pp": 1.46,
       "target_reduction_rate": 0.2,
       "meets_target": true,
       "species_progress": [
@@ -75,13 +75,13 @@
         {
           "species_id": "corvus_corone",
           "common_name": "까마귀",
-          "raw_count": 89,
+          "raw_count": 140,
           "baseline_raw_count": 89,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 17,
+          "additional_collected": 51,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 50,
-          "gap_to_target_extra": 50
+          "gap_to_target_extra": 0
         }
       ],
       "status": "COLLECTING",
@@ -99,35 +99,35 @@
       "target_extra": 40,
       "reason": "까마귀→까치 5.9% 오분류",
       "baseline_combined_confusion_rate": 0.029,
-      "current_combined_confusion_rate": 0.0286,
-      "improvement_pp": 0.04,
+      "current_combined_confusion_rate": 0.0,
+      "improvement_pp": 2.9,
       "target_reduction_rate": 0.2,
-      "meets_target": false,
+      "meets_target": true,
       "species_progress": [
         {
           "species_id": "pica_pica",
           "common_name": "까치",
-          "raw_count": 90,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 40,
-          "gap_to_target_extra": 40
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "corvus_corone",
           "common_name": "까마귀",
-          "raw_count": 89,
+          "raw_count": 140,
           "baseline_raw_count": 89,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 17,
+          "additional_collected": 51,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 40,
-          "gap_to_target_extra": 40
+          "gap_to_target_extra": 0
         }
       ],
-      "status": "COLLECTING",
+      "status": "READY_FOR_SPLIT",
       "collection_tips": [
         "까치의 흑백 패턴과 까마귀의 전체 검은색 깃털 대비"
       ]
@@ -141,8 +141,8 @@
       "target_extra": 50,
       "reason": "Top-1 오분류 쌍; 16.7% 혼동률",
       "baseline_combined_confusion_rate": 0.167,
-      "current_combined_confusion_rate": 0.098,
-      "improvement_pp": 6.9,
+      "current_combined_confusion_rate": 0.125,
+      "improvement_pp": 4.2,
       "target_reduction_rate": 0.2,
       "meets_target": true,
       "species_progress": [
@@ -160,16 +160,16 @@
         {
           "species_id": "hydropotes_inermis",
           "common_name": "고라니",
-          "raw_count": 115,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 25,
-          "train_count": 92,
-          "val_count": 23,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 50,
-          "gap_to_target_extra": 25
+          "gap_to_target_extra": 0
         }
       ],
-      "status": "COLLECTING",
+      "status": "READY_FOR_SPLIT",
       "collection_tips": [
         "노루의 붉은 여름 털/겨울 회색 털",
         "고라니의 작은 체구·갈대밭 서식지",
@@ -185,35 +185,35 @@
       "target_extra": 50,
       "reason": "Top-3 오분류; 맹금류 F1 최저",
       "baseline_combined_confusion_rate": 0.086,
-      "current_combined_confusion_rate": 0.1087,
-      "improvement_pp": -2.27,
+      "current_combined_confusion_rate": 0.1429,
+      "improvement_pp": -5.69,
       "target_reduction_rate": 0.2,
       "meets_target": false,
       "species_progress": [
         {
           "species_id": "falco_tinnunculus",
           "common_name": "황조롱이",
-          "raw_count": 124,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 34,
-          "train_count": 100,
-          "val_count": 24,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 50,
-          "gap_to_target_extra": 16
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "accipiter_gentilis",
           "common_name": "참매",
-          "raw_count": 112,
+          "raw_count": 140,
           "baseline_raw_count": 89,
-          "additional_collected": 23,
-          "train_count": 90,
-          "val_count": 22,
+          "additional_collected": 51,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 50,
-          "gap_to_target_extra": 27
+          "gap_to_target_extra": 0
         }
       ],
-      "status": "COLLECTING",
+      "status": "READY_FOR_SPLIT",
       "collection_tips": [
         "황조롱이 공중 정지(hovering) 장면",
         "참매의 숲속 급강하·긴 꼬리 실루엣"
@@ -228,35 +228,35 @@
       "target_extra": 40,
       "reason": "Top-2 오분류; 22.2% (새사촌 기준)",
       "baseline_combined_confusion_rate": 0.111,
-      "current_combined_confusion_rate": 0.0556,
-      "improvement_pp": 5.54,
+      "current_combined_confusion_rate": 0.0,
+      "improvement_pp": 11.1,
       "target_reduction_rate": 0.2,
       "meets_target": true,
       "species_progress": [
         {
           "species_id": "cettia_diphone",
           "common_name": "새사촌",
-          "raw_count": 90,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 40,
-          "gap_to_target_extra": 40
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "parus_minor",
           "common_name": "쇠박새",
-          "raw_count": 90,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 40,
-          "gap_to_target_extra": 40
+          "gap_to_target_extra": 0
         }
       ],
-      "status": "COLLECTING",
+      "status": "READY_FOR_SPLIT",
       "collection_tips": [
         "새사촌은 수풀 속 전신이 어려우므로 울음 녹음+사진 병행",
         "쇠박새의 노란 배색 클로즈업"
@@ -271,35 +271,35 @@
       "target_extra": 40,
       "reason": "참새 F1 0.57; 쑥새와 혼동",
       "baseline_combined_confusion_rate": 0.088,
-      "current_combined_confusion_rate": 0.0976,
-      "improvement_pp": -0.96,
+      "current_combined_confusion_rate": 0.0179,
+      "improvement_pp": 7.01,
       "target_reduction_rate": 0.2,
-      "meets_target": false,
+      "meets_target": true,
       "species_progress": [
         {
           "species_id": "passer_montanus",
           "common_name": "참새",
-          "raw_count": 124,
+          "raw_count": 140,
           "baseline_raw_count": 89,
-          "additional_collected": 35,
-          "train_count": 100,
-          "val_count": 24,
+          "additional_collected": 51,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 40,
-          "gap_to_target_extra": 5
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "emberiza_schoeniclus",
           "common_name": "검은머리쑥새",
-          "raw_count": 89,
+          "raw_count": 140,
           "baseline_raw_count": 89,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 17,
+          "additional_collected": 51,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 40,
-          "gap_to_target_extra": 40
+          "gap_to_target_extra": 0
         }
       ],
-      "status": "COLLECTING",
+      "status": "READY_FOR_SPLIT",
       "collection_tips": [
         "참새의 집/마을 배경 vs 쑥새의 갈대밭",
         "부리·머리 패턴 클로즈업"
@@ -314,35 +314,35 @@
       "target_extra": 30,
       "reason": "말똥가리→참매 오분류",
       "baseline_combined_confusion_rate": 0.057,
-      "current_combined_confusion_rate": 0.05,
-      "improvement_pp": 0.7,
+      "current_combined_confusion_rate": 0.0536,
+      "improvement_pp": 0.34,
       "target_reduction_rate": 0.2,
       "meets_target": false,
       "species_progress": [
         {
           "species_id": "buteo_japonicus",
           "common_name": "말똥가리",
-          "raw_count": 90,
+          "raw_count": 140,
           "baseline_raw_count": 90,
-          "additional_collected": 0,
-          "train_count": 72,
-          "val_count": 18,
+          "additional_collected": 50,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 30,
-          "gap_to_target_extra": 30
+          "gap_to_target_extra": 0
         },
         {
           "species_id": "accipiter_gentilis",
           "common_name": "참매",
-          "raw_count": 112,
+          "raw_count": 140,
           "baseline_raw_count": 89,
-          "additional_collected": 23,
-          "train_count": 90,
-          "val_count": 22,
+          "additional_collected": 51,
+          "train_count": 112,
+          "val_count": 28,
           "target_extra": 30,
-          "gap_to_target_extra": 7
+          "gap_to_target_extra": 0
         }
       ],
-      "status": "COLLECTING",
+      "status": "READY_FOR_SPLIT",
       "collection_tips": [
         "말똥가리의 넓은 날개 선회 비행",
         "참매의 빠른 숲 비행"
@@ -351,8 +351,8 @@
   ],
   "summary": {
     "pair_count": 8,
-    "collecting_pairs": 8,
-    "ready_for_split_pairs": 0,
+    "collecting_pairs": 2,
+    "ready_for_split_pairs": 6,
     "high_priority_pairs": 5
   }
 }
