@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 class AudioIdentifyService:
     def __init__(self) -> None:
         self.species_ids = self._load_species_ids()
+        self.known_species_ids = {item["id"] for item in self.species_ids}
         self.model = None
         self.model_classes = 0
         self.model_val_acc: float | None = None
@@ -125,12 +126,14 @@ class AudioIdentifyService:
         with self._torch.no_grad():
             logits = self.model(tensor)
             probs = self._torch.softmax(logits, dim=1)[0]
-        topk = min(3, probs.shape[0])
+        topk = min(max(3, len(self.idx_to_species)), probs.shape[0])
         values, indices = self._torch.topk(probs, topk)
         candidates: list[IdentificationCandidate] = []
         for value, idx in zip(values.tolist(), indices.tolist()):
             species = self.idx_to_species.get(str(idx)) or self.idx_to_species.get(idx)
             if not species:
+                continue
+            if species["id"] not in self.known_species_ids:
                 continue
             candidates.append(
                 IdentificationCandidate(
@@ -140,6 +143,8 @@ class AudioIdentifyService:
                     confidence=round(float(value), 4),
                 )
             )
+            if len(candidates) == 3:
+                break
         return candidates
 
     def _analyze_audio_features(self, content: bytes) -> dict:
