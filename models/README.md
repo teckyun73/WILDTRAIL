@@ -91,11 +91,24 @@ python stamp_checkpoint.py --checkpoint checkpoints/best_model.pth --data-dir ..
 
 ## 3. 오디오 분류 학습
 
-```bash
-python train_audio.py --data-dir ../data/audio --epochs 20
+```powershell
+cd models
+
+# 1) train → val 분리 (최초 1회 또는 재분리 시)
+.\ml.ps1 split_audio.py --data-dir ..\data\audio --dry-run   # 계획 확인
+.\ml.ps1 split_audio.py --data-dir ..\data\audio --clear-val
+
+# 2) 학습
+.\ml.ps1 train_audio.py --data-dir ..\data\audio --epochs 20
 ```
 
-→ `checkpoints/best_audio_model.pth` (자동 로드)
+`split_audio.py` 옵션:
+- `--val-ratio 0.2` — 검증 비율 (기본 20%)
+- `--copy` — 이동 대신 복사 (train 원본 유지)
+- `--source raw` — `data/audio/raw/`에서 train+val 생성
+- `--report ../reports/audio_split_report.json` — JSON 리포트 저장
+
+→ `checkpoints/best_audio_model.pth` (백엔드 자동 로드)
 
 ## 가이드
 
