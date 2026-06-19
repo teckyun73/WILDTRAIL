@@ -1,0 +1,7 @@
+# ML scripts (train / evaluate / validate_coverage) — backend venv와 동일
+torch>=2.5.0
+torchvision>=0.20.0
+numpy>=1.26.0
+scikit-learn>=1.5.0
+matplotlib>=3.9.0
+pillow>=11.0.0

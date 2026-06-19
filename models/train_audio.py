@@ -10,13 +10,16 @@ WildTrail 오디오(조류 울음) 분류 학습 스크립트
       pica_pica/
 
 사용법:
-  python train_audio.py --data-dir ../data/audio --epochs 20
+  cd models
+  .\\ml.ps1 split_audio.py --data-dir ..\\data\\audio
+  .\\ml.ps1 train_audio.py --data-dir ..\\data\\audio --epochs 20
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import warnings
 from pathlib import Path
 
 import torch
@@ -37,7 +40,7 @@ DURATION_SEC = 3.0
 
 
 class MelSpectrogramDataset(Dataset):
-    def __init__(self, root: Path, transform=None):
+    def __init__(self, root: Path, transform=None, preload: bool = True):
         self.samples: list[tuple[Path, int]] = []
         self.classes = sorted(p.name for p in root.iterdir() if p.is_dir())
         self.class_to_idx = {name: idx for idx, name in enumerate(self.classes)}
@@ -47,6 +50,26 @@ class MelSpectrogramDataset(Dataset):
                 if path.suffix.lower() in exts:
                     self.samples.append((path, self.class_to_idx[class_name]))
         self.transform = transform
+        self._cache: list[torch.Tensor] = []
+        if preload and self.samples:
+            self._preload()
+
+    def _preload(self) -> None:
+        print(f"Preloading {len(self.samples)} clips from {self.samples[0][0].parents[1].name}...", flush=True)
+        failed = 0
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            for index, (path, _) in enumerate(self.samples, start=1):
+                try:
+                    mel = torch.from_numpy(self._load_mel(path))
+                except Exception:
+                    failed += 1
+                    mel = torch.zeros((3, N_MELS, 1), dtype=torch.float32)
+                self._cache.append(mel)
+                if index % 100 == 0 or index == len(self.samples):
+                    print(f"  cached {index}/{len(self.samples)}", flush=True)
+        if failed:
+            print(f"  warning: {failed} clips failed to load and were zero-filled", flush=True)
 
     def __len__(self) -> int:
         return len(self.samples)
@@ -65,9 +88,8 @@ class MelSpectrogramDataset(Dataset):
         return img
 
     def __getitem__(self, index: int):
-        path, label = self.samples[index]
-        mel = self._load_mel(path)
-        tensor = torch.from_numpy(mel)
+        _, label = self.samples[index]
+        tensor = self._cache[index] if self._cache else torch.from_numpy(self._load_mel(self.samples[index][0]))
         if self.transform:
             tensor = self.transform(tensor)
         return tensor, label
@@ -114,16 +136,24 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--output", type=Path, default=Path("checkpoints/best_audio_model.pth"))
+    parser.add_argument("--no-preload", action="store_true", help="Mel 스펙트로그램 사전 캐시 비활성화")
     args = parser.parse_args()
 
     train_root = args.data_dir / "train"
     val_root = args.data_dir / "val"
     if not train_root.exists():
         raise FileNotFoundError(f"{train_root} 없음. data/audio/train/<species_id>/ 구조로 준비하세요.")
+    if not val_root.exists():
+        raise FileNotFoundError(
+            f"{val_root} 없음. 먼저 split_audio.py를 실행하세요: "
+            ".\\ml.ps1 split_audio.py --data-dir ..\\data\\audio --clear-val"
+        )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    train_ds = MelSpectrogramDataset(train_root)
-    val_ds = MelSpectrogramDataset(val_root)
+    print(f"Device: {device}", flush=True)
+    preload = not args.no_preload
+    train_ds = MelSpectrogramDataset(train_root, preload=preload)
+    val_ds = MelSpectrogramDataset(val_root, preload=preload)
     train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False)
 
@@ -154,7 +184,8 @@ def main() -> None:
         print(
             f"Epoch {epoch}/{args.epochs} "
             f"train_loss={train_loss:.4f} train_acc={train_acc:.4f} "
-            f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}"
+            f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}",
+            flush=True,
         )
         if val_acc > best_acc:
             best_acc = val_acc
@@ -169,7 +200,7 @@ def main() -> None:
                 },
                 args.output,
             )
-            print(f"Saved {args.output} (val_acc={val_acc:.4f})")
+            print(f"Saved {args.output} (val_acc={val_acc:.4f})", flush=True)
 
 
 if __name__ == "__main__":

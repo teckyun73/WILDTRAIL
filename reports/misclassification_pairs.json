@@ -1,62 +1,62 @@
 [
   {
-    "true_id": "capreolus_capreolus",
-    "pred_id": "hydropotes_inermis",
-    "count": 5,
-    "rate_of_true": 0.2778
-  },
-  {
-    "true_id": "cettia_diphone",
-    "pred_id": "parus_minor",
-    "count": 4,
-    "rate_of_true": 0.2222
-  },
-  {
     "true_id": "falco_tinnunculus",
     "pred_id": "accipiter_gentilis",
-    "count": 4,
-    "rate_of_true": 0.2222
+    "count": 7,
+    "rate_of_true": 0.25
   },
   {
-    "true_id": "passer_montanus",
-    "pred_id": "emberiza_schoeniclus",
-    "count": 3,
-    "rate_of_true": 0.1765
-  },
-  {
-    "true_id": "accipiter_gentilis",
-    "pred_id": "cettia_diphone",
-    "count": 2,
-    "rate_of_true": 0.1176
-  },
-  {
-    "true_id": "alcedo_atthis",
+    "true_id": "hydropotes_inermis",
     "pred_id": "capreolus_capreolus",
-    "count": 2,
-    "rate_of_true": 0.1176
+    "count": 7,
+    "rate_of_true": 0.25
   },
   {
-    "true_id": "anas_platyrhynchos",
-    "pred_id": "melanitta_fusca",
-    "count": 2,
-    "rate_of_true": 0.1176
+    "true_id": "parus_minor",
+    "pred_id": "pica_serica",
+    "count": 4,
+    "rate_of_true": 0.1429
   },
   {
     "true_id": "buteo_japonicus",
     "pred_id": "accipiter_gentilis",
-    "count": 2,
-    "rate_of_true": 0.1111
+    "count": 3,
+    "rate_of_true": 0.1071
   },
   {
-    "true_id": "caprimulgus_jotaka",
-    "pred_id": "athene_noctua",
-    "count": 2,
-    "rate_of_true": 0.1111
+    "true_id": "cettia_diphone",
+    "pred_id": "zosterops_japonicus",
+    "count": 3,
+    "rate_of_true": 0.1071
   },
   {
-    "true_id": "ciconia_boyciana",
+    "true_id": "corvus_corone",
     "pred_id": "nycticorax_nycticorax",
+    "count": 3,
+    "rate_of_true": 0.1071
+  },
+  {
+    "true_id": "emberiza_schoeniclus",
+    "pred_id": "cettia_diphone",
+    "count": 3,
+    "rate_of_true": 0.1071
+  },
+  {
+    "true_id": "phalacrocorax_carbo",
+    "pred_id": "ciconia_boyciana",
+    "count": 3,
+    "rate_of_true": 0.1071
+  },
+  {
+    "true_id": "anas_platyrhynchos",
+    "pred_id": "tachybaptus_ruficollis",
     "count": 2,
-    "rate_of_true": 0.1111
+    "rate_of_true": 0.0714
+  },
+  {
+    "true_id": "athene_noctua",
+    "pred_id": "pica_serica",
+    "count": 2,
+    "rate_of_true": 0.0714
   }
 ]

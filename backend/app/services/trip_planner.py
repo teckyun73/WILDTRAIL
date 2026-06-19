@@ -10,6 +10,7 @@ from app.schemas import (
     TripDayPlan,
     TripPlanRequest,
     TripPlanResponse,
+    TripRouteStop,
 )
 
 DISCLAIMER = (
@@ -46,9 +47,12 @@ class TripPlannerService:
             days=request.days,
             travelers=request.travelers,
             hotspot_name=hotspot.name,
+            hotspot_latitude=hotspot.latitude,
+            hotspot_longitude=hotspot.longitude,
             region=hotspot.region,
             summary=summary,
             checklist=self._build_checklist(species),
+            route_stops=self._build_route_stops(request, hotspot, days_plan),
             days_plan=days_plan,
             costs=costs,
             disclaimer=DISCLAIMER,
@@ -162,6 +166,38 @@ class TripPlannerService:
                 title = f"Day {day} 심화 관찰"
             plans.append(TripDayPlan(day=day, title=title, items=items))
         return plans
+
+    def _build_route_stops(
+        self, request: TripPlanRequest, hotspot: Hotspot, days_plan: list[TripDayPlan]
+    ) -> list[TripRouteStop]:
+        origin = request.origin.strip()
+        destination = hotspot.name.strip()
+        stops: list[TripRouteStop] = []
+        if origin:
+            stops.append(TripRouteStop(name=origin, role="출발"))
+
+        seen = {origin, destination}
+        for day in days_plan:
+            for item in day.items:
+                location = item.location.strip()
+                if location and location not in seen:
+                    stops.append(TripRouteStop(name=location, role="경유"))
+                    seen.add(location)
+                    if len(stops) >= 5:
+                        break
+            if len(stops) >= 5:
+                break
+
+        if destination:
+            stops.append(
+                TripRouteStop(
+                    name=destination,
+                    role="주요 관찰지",
+                    latitude=hotspot.latitude,
+                    longitude=hotspot.longitude,
+                )
+            )
+        return stops
 
     def _build_checklist(self, species: Species) -> list[str]:
         base = ["쌍안경(8x42 권장)", "카메라/스마트폰", "방수 신발", "모자·선크림", "간식·물"]

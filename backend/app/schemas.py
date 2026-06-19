@@ -98,6 +98,13 @@ class TripDayPlan(BaseModel):
     items: list[TripDayItem]
 
 
+class TripRouteStop(BaseModel):
+    name: str
+    role: str
+    latitude: float | None = None
+    longitude: float | None = None
+
+
 class TripPlanResponse(BaseModel):
     species_id: str
     species_name: str
@@ -105,9 +112,12 @@ class TripPlanResponse(BaseModel):
     days: int
     travelers: int
     hotspot_name: str
+    hotspot_latitude: float
+    hotspot_longitude: float
     region: str
     summary: str
     checklist: list[str]
+    route_stops: list[TripRouteStop]
     days_plan: list[TripDayPlan]
     costs: CostBreakdown
     disclaimer: str
