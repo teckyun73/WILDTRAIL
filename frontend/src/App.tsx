@@ -27,6 +27,16 @@ function formatKrw(value: number) {
   return `${value.toLocaleString("ko-KR")}원`;
 }
 
+const ACCOMMODATION_LABELS: Record<string, string> = {
+  guesthouse: "게스트하우스",
+  hotel: "호텔",
+  pension: "펜션",
+};
+
+function accommodationTypeLabel(type: string) {
+  return ACCOMMODATION_LABELS[type] ?? type;
+}
+
 function confidenceColor(confidence: number) {
   if (confidence >= 0.8) return "text-green-700";
   if (confidence >= 0.6) return "text-amber-700";
@@ -70,6 +80,7 @@ export default function App() {
     days: 1,
     budget_krw: 150000,
     travelers: 1,
+    accommodation: "guesthouse",
   });
 
   const filteredSpecies = useMemo(() => {
@@ -179,7 +190,7 @@ export default function App() {
         travelers: tripForm.travelers,
         preferences: {
           transport: "public",
-          accommodation: "guesthouse",
+          accommodation: tripForm.accommodation,
           difficulty: "easy",
         },
       });
@@ -561,6 +572,22 @@ export default function App() {
                   />
                 </label>
               ))}
+              <label className="mt-4 block text-sm">
+                숙박 유형
+                <select
+                  value={tripForm.accommodation}
+                  onChange={(e) =>
+                    setTripForm((prev) => ({ ...prev, accommodation: e.target.value }))
+                  }
+                  className="mt-1 w-full rounded-xl border border-forest-100 px-3 py-2"
+                >
+                  {Object.entries(ACCOMMODATION_LABELS).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <button
                 type="submit"
                 disabled={loading}
@@ -599,6 +626,62 @@ export default function App() {
                       1인당 {formatKrw(tripPlan.costs.per_person)}
                     </p>
                   </div>
+
+                  {tripPlan.days > 1 && (
+                    <div>
+                      <h3 className="font-semibold">추천 숙박</h3>
+                      {(tripPlan.accommodation_options ?? []).length > 0 ? (
+                        <div className="mt-3 space-y-3">
+                          {(tripPlan.accommodation_options ?? []).map((stay) => (
+                            <article
+                              key={stay.name}
+                              className="rounded-2xl border border-forest-100 p-4 text-sm"
+                            >
+                              <div className="flex flex-wrap items-start justify-between gap-2">
+                                <div>
+                                  <p className="font-semibold">{stay.name}</p>
+                                  <p className="mt-1 text-forest-700/70">
+                                    {accommodationTypeLabel(stay.type)} · {stay.region}
+                                  </p>
+                                </div>
+                                <p className="font-semibold text-forest-800">
+                                  {formatKrw(stay.price_per_night_krw)}
+                                  <span className="text-xs font-normal text-forest-700/60"> /박</span>
+                                </p>
+                              </div>
+                              {stay.address && (
+                                <p className="mt-2 text-forest-700/70">{stay.address}</p>
+                              )}
+                              <div className="mt-2 flex flex-wrap gap-3 text-xs text-forest-700/60">
+                                {stay.distance_km != null && (
+                                  <span>관찰지 약 {stay.distance_km}km</span>
+                                )}
+                                {stay.rating != null && <span>평점 {stay.rating.toFixed(1)}</span>}
+                                <span>출처: {stay.source === "stub" ? "샘플 데이터" : stay.source}</span>
+                              </div>
+                              {stay.note && (
+                                <p className="mt-2 text-forest-700/80">{stay.note}</p>
+                              )}
+                              {stay.booking_url && (
+                                <a
+                                  href={stay.booking_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="mt-3 inline-block text-sm font-medium text-forest-700 underline"
+                                >
+                                  예약·정보 포털 보기
+                                </a>
+                              )}
+                            </article>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="mt-2 text-sm text-forest-700/70">
+                          예산 범위 내 숙박 후보가 없습니다. 예산을 늘리거나 숙박 유형을 변경해 보세요.
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   <div>
                     <h3 className="font-semibold">준비물</h3>

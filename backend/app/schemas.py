@@ -105,6 +105,19 @@ class TripRouteStop(BaseModel):
     longitude: float | None = None
 
 
+class AccommodationOption(BaseModel):
+    name: str
+    type: str
+    region: str
+    address: str = ""
+    price_per_night_krw: int
+    distance_km: float | None = None
+    rating: float | None = None
+    booking_url: str = ""
+    source: str
+    note: str = ""
+
+
 class TripPlanResponse(BaseModel):
     species_id: str
     species_name: str
@@ -118,6 +131,7 @@ class TripPlanResponse(BaseModel):
     summary: str
     checklist: list[str]
     route_stops: list[TripRouteStop]
+    accommodation_options: list[AccommodationOption] = Field(default_factory=list)
     days_plan: list[TripDayPlan]
     costs: CostBreakdown
     disclaimer: str
