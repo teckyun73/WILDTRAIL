@@ -12,10 +12,16 @@
 
 from __future__ import annotations
 
+import json
+import logging
+import re
+
 from app.config import get_settings
 from app.schemas import AccommodationOption
+from app.services.llm import chat, is_llm_configured
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 _ACCOMMODATION_TYPE_LABELS: dict[str, str] = {
     "guesthouse": "게스트하우스",
@@ -181,6 +187,97 @@ class PublicApiService:
             )
         )
         return options[:5]
+
+    def enrich_accommodation_notes_with_llm(
+        self,
+        options: list[AccommodationOption],
+        *,
+        hotspot_name: str,
+        hotspot_region: str,
+        transport_note: str,
+        facilities: str,
+        safety_note: str,
+        species_name: str,
+        origin: str,
+        days: int,
+        accommodation_type: str,
+    ) -> list[AccommodationOption]:
+        """패턴 2: stub 숙박 후보의 note만 LLM으로 생태관광 맥락에 맞게 보강."""
+        if not options or not is_llm_configured():
+            return options
+
+        payload = {
+            "hotspot_name": hotspot_name,
+            "hotspot_region": hotspot_region,
+            "transport_note": transport_note,
+            "facilities": facilities,
+            "safety_note": safety_note,
+            "species_name": species_name,
+            "origin": origin,
+            "days": days,
+            "accommodation_type": accommodation_type,
+            "options": [
+                {
+                    "name": o.name,
+                    "type": o.type,
+                    "price_per_night_krw": o.price_per_night_krw,
+                    "distance_km": o.distance_km,
+                    "note": o.note,
+                }
+                for o in options
+            ],
+        }
+
+        raw = chat(
+            system=(
+                "당신은 한국 생태관광 숙박 조언 도우미입니다. "
+                "입력 options의 name·가격·거리·유형은 변경하지 마세요. "
+                "각 숙소의 note만 1~2문장으로 다시 작성하세요. "
+                "새벽·황혼 관찰, 대중교통, 조용한 숙소, 관찰지까지 이동 등에 초점을 맞추세요. "
+                "출현 보장·허위 상호·새로운 숙소 추가는 금지합니다. "
+                'JSON 배열만 출력: [{"name":"...", "note":"..."}, ...]'
+            ),
+            user=json.dumps(payload, ensure_ascii=False),
+            temperature=0.3,
+        )
+        if not raw:
+            return options
+
+        notes_by_name = self._parse_accommodation_notes_json(raw)
+        if not notes_by_name:
+            return options
+
+        enriched: list[AccommodationOption] = []
+        for opt in options:
+            new_note = notes_by_name.get(opt.name)
+            if new_note:
+                enriched.append(
+                    opt.model_copy(update={"note": new_note, "source": "stub+llm"})
+                )
+            else:
+                enriched.append(opt)
+        return enriched
+
+    @staticmethod
+    def _parse_accommodation_notes_json(raw: str) -> dict[str, str]:
+        text = raw.strip()
+        fence = re.search(r"```(?:json)?\s*([\s\S]*?)```", text)
+        if fence:
+            text = fence.group(1).strip()
+        try:
+            data = json.loads(text)
+        except json.JSONDecodeError:
+            logger.warning("Failed to parse LLM accommodation notes JSON")
+            return {}
+
+        if not isinstance(data, list):
+            return {}
+
+        result: dict[str, str] = {}
+        for item in data:
+            if isinstance(item, dict) and item.get("name") and item.get("note"):
+                result[str(item["name"])] = str(item["note"]).strip()
+        return result
 
 
 public_api_service = PublicApiService()

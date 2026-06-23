@@ -33,8 +33,10 @@ const ACCOMMODATION_LABELS: Record<string, string> = {
   pension: "펜션",
 };
 
-function accommodationTypeLabel(type: string) {
-  return ACCOMMODATION_LABELS[type] ?? type;
+function accommodationSourceLabel(source: string) {
+  if (source === "stub") return "샘플 데이터";
+  if (source === "stub+llm") return "샘플+AI 설명 보강";
+  return source;
 }
 
 function confidenceColor(confidence: number) {
@@ -657,7 +659,7 @@ export default function App() {
                                   <span>관찰지 약 {stay.distance_km}km</span>
                                 )}
                                 {stay.rating != null && <span>평점 {stay.rating.toFixed(1)}</span>}
-                                <span>출처: {stay.source === "stub" ? "샘플 데이터" : stay.source}</span>
+                                <span>출처: {accommodationSourceLabel(stay.source)}</span>
                               </div>
                               {stay.note && (
                                 <p className="mt-2 text-forest-700/80">{stay.note}</p>

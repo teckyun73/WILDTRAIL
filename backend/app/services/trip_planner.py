@@ -55,7 +55,7 @@ class TripPlannerService:
             summary=summary,
             checklist=self._build_checklist(species),
             route_stops=self._build_route_stops(request, hotspot, days_plan),
-            accommodation_options=self._find_accommodations(request, hotspot),
+            accommodation_options=self._find_accommodations(request, hotspot, species),
             days_plan=days_plan,
             costs=costs,
             disclaimer=DISCLAIMER,
@@ -203,11 +203,11 @@ class TripPlannerService:
         return stops
 
     def _find_accommodations(
-        self, request: TripPlanRequest, hotspot: Hotspot
+        self, request: TripPlanRequest, hotspot: Hotspot, species: Species
     ) -> list[AccommodationOption]:
         if request.days <= 1:
             return []
-        return public_api_service.search_accommodations(
+        options = public_api_service.search_accommodations(
             region=hotspot.region,
             latitude=hotspot.latitude,
             longitude=hotspot.longitude,
@@ -215,6 +215,18 @@ class TripPlannerService:
             budget_krw=request.budget_krw,
             nights=request.days - 1,
             travelers=request.travelers,
+        )
+        return public_api_service.enrich_accommodation_notes_with_llm(
+            options,
+            hotspot_name=hotspot.name,
+            hotspot_region=hotspot.region,
+            transport_note=hotspot.transport_note,
+            facilities=hotspot.facilities,
+            safety_note=hotspot.safety_note,
+            species_name=species.common_name,
+            origin=request.origin,
+            days=request.days,
+            accommodation_type=request.preferences.accommodation,
         )
 
     def _build_checklist(self, species: Species) -> list[str]:
