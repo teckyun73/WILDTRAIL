@@ -84,6 +84,7 @@ class EncyclopediaRAGService:
                     body = (
                         f"관찰지: {item['name']} ({item['region']})\n"
                         f"대상종: {item['species_id']}\n"
+                        f"추천월: {item.get('best_months', '')}\n"
                         f"교통: {item.get('transport_note', '')}\n"
                         f"시설: {item.get('facilities', '')}\n"
                         f"주의: {item.get('safety_note', '')}"
