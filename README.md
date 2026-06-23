@@ -34,7 +34,7 @@
 | **오디오 식별** | Mel 스펙트로그램 + ResNet18 (모델 없으면 분석+stub) |
 | **도감 RAG** | TF-IDF 검색 + Gemini/OpenAI LLM 요약 (키 없으면 템플릿) |
 | **관찰지 지도** | Leaflet + `hotspots.json` 핫스팟 |
-| **여행 플래너** | 규칙 기반 일정·경비·경로 + LLM 요약 (선택) |
+| **여행 플래너** | 규칙 기반 일정·경비·경로 + **숙박 후보**(stub, LLM note 보강) + LLM 요약 (선택) |
 | **관찰 기록** | SQLite sightings 타임라인 |
 
 ---
@@ -158,7 +158,7 @@ netstat -ano | findstr :8000
 | 오디오 식별 | 분석 + stub | **AI 모델** (학습 시) | AI 모델 |
 | 도감 조회 | ✅ | ✅ | ✅ |
 | RAG Q&A | 템플릿 | 템플릿 | **LLM** (`llm+rag`) |
-| 여행 플래너 | 규칙 엔진 | 규칙 엔진 | LLM 요약 |
+| 여행 플래너 | 규칙 엔진 + 숙박 stub | 규칙 엔진 + 숙박 stub | LLM 요약 + **숙박 note 보강** (`stub+llm`) |
 | 관찰지 지도 | ✅ | ✅ | ✅ |
 | 관찰 기록 | ✅ | ✅ | ✅ |
 
@@ -198,7 +198,7 @@ Invoke-RestMethod http://127.0.0.1:8000/api/v1/identify/image -Method Post -Form
 $body = @{ question = "어디서 보면 좋나요?"; species_id = "pica_pica" } | ConvertTo-Json
 Invoke-RestMethod http://127.0.0.1:8000/api/v1/encyclopedia/ask -Method Post -Body $body -ContentType "application/json"
 
-# 여행 일정
+# 여행 일정 (2일 이상 시 accommodation_options 포함)
 $body = @{
   species_id = "grus_japonensis"
   origin = "서울"
@@ -208,6 +208,7 @@ $body = @{
   preferences = @{ transport = "public"; accommodation = "guesthouse" }
 } | ConvertTo-Json -Depth 5
 Invoke-RestMethod http://127.0.0.1:8000/api/v1/trips/plan -Method Post -Body $body -ContentType "application/json"
+# 응답 accommodation_options[].source: "stub" | "stub+llm" (GEMINI_API_KEY 설정 시 note AI 보강)
 ```
 
 ---
@@ -250,7 +251,7 @@ cd models
 - **이미지 정확도:** 통일 전처리 evaluate **~83.6%** (30종, 로컬 최신 학습 기준 — [ML_EVAL_REPORT.md](docs/ML_EVAL_REPORT.md) 참고)
 - **오디오 정확도:** ResNet18 val **~52%** (과적합·데이터 불균형 개선 여지)
 - **LLM:** Gemini/OpenAI 키·할당량 필요 (`/health`의 `llm_configured` 확인)
-- **공공 API:** 일부 지역정보·날씨는 스텁 응답
+- **공공 API:** 일부 지역정보·날씨·**숙박 후보**는 스텁 응답 (숙소명·가격은 샘플, LLM은 **설명(note)만** 보강 — Tour API 연동 예정)
 - **동기 추론:** PyTorch 추론이 API 스레드에서 동기 실행 (MVP 수준)
 
 ---
@@ -274,7 +275,9 @@ WildTrail/
 - [x] P0: DB 시드 upsert, `/health`, 업로드 검증, 로깅
 - [x] P1: evaluate.py, 오분류 분석, 전처리 정합성, 커버리지 검증
 - [x] LLM: Gemini 어댑터 (`LLM_PROVIDER`), RAG·여행 플래너 연동
+- [x] 여행 플래너: 숙박 후보 API·UI, stub+LLM note 보강 (패턴 2)
 - [x] 오디오: `split_audio.py`, `train_audio.py`, Mel+ResNet18 파이프라인
+- [ ] Tour API·공공데이터 기반 **실제 숙박** 검색 연동
 - [ ] hard negative 수집 후 이미지 재학습 (까치/어치·노루/고라니 등)
 - [ ] 오디오 데이터 보강·val acc 개선
 - [ ] 영상 YOLO 파이프라인
