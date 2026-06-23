@@ -86,6 +86,19 @@ export interface TripDayPlan {
   items: TripDayItem[];
 }
 
+export interface AccommodationOption {
+  name: string;
+  type: string;
+  region: string;
+  address: string;
+  price_per_night_krw: number;
+  distance_km: number | null;
+  rating: number | null;
+  booking_url: string;
+  source: string;
+  note: string;
+}
+
 export interface TripPlanResponse {
   species_id: string;
   species_name: string;
@@ -96,6 +109,7 @@ export interface TripPlanResponse {
   region: string;
   summary: string;
   checklist: string[];
+  accommodation_options: AccommodationOption[];
   days_plan: TripDayPlan[];
   costs: CostBreakdown;
   disclaimer: string;

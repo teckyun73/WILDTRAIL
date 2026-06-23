@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 
 from app.models import Hotspot, Species
 from app.services.llm import chat, is_llm_configured
+from app.services.public_api import public_api_service
 from app.schemas import (
+    AccommodationOption,
     CostBreakdown,
     TripDayItem,
     TripDayPlan,
@@ -53,6 +55,7 @@ class TripPlannerService:
             summary=summary,
             checklist=self._build_checklist(species),
             route_stops=self._build_route_stops(request, hotspot, days_plan),
+            accommodation_options=self._find_accommodations(request, hotspot),
             days_plan=days_plan,
             costs=costs,
             disclaimer=DISCLAIMER,
@@ -198,6 +201,21 @@ class TripPlannerService:
                 )
             )
         return stops
+
+    def _find_accommodations(
+        self, request: TripPlanRequest, hotspot: Hotspot
+    ) -> list[AccommodationOption]:
+        if request.days <= 1:
+            return []
+        return public_api_service.search_accommodations(
+            region=hotspot.region,
+            latitude=hotspot.latitude,
+            longitude=hotspot.longitude,
+            accommodation_type=request.preferences.accommodation,
+            budget_krw=request.budget_krw,
+            nights=request.days - 1,
+            travelers=request.travelers,
+        )
 
     def _build_checklist(self, species: Species) -> list[str]:
         base = ["쌍안경(8x42 권장)", "카메라/스마트폰", "방수 신발", "모자·선크림", "간식·물"]
